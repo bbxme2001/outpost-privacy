@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Outpost login</title>
+</head>
+<body>
+<p id="msg">Returning to Outpost on this computer...</p>
+<script>
+(() => {
+  // Only the query string travels on: a one-time login code, or a refusal. Whatever is in the
+  // fragment (a token from another kind of login, Facebook's "#_=_") stops here.
+  const params = new URLSearchParams(location.search);
+  const port = Number((params.get('state') || '').split('.')[0]);
+  if (Number.isInteger(port) && port >= 1024 && port <= 65535) {
+    location.replace('http://localhost:' + port + '/callback' + location.search);
+  } else {
+    document.getElementById('msg').textContent = 'This page only finishes a login started by Outpost.';
+  }
+})();
+</script>
+</body>
+</html>
